@@ -1,10 +1,10 @@
 var game = new Phaser.Game(960, 640, Phaser.AUTO, '', {preload:preload, create:create, update:update});
 
 function preload() {
-	game.load.atlas("kirby", "assets/normal_kirby.png", "assets/normal_kirby.json");
-	game.load.image("background", "assets/intro/introBG.png");
-	game.load.tilemap("tilemap_intro001", "assets/intro/intro001.json", null, Phaser.Tilemap.TILED_JSON);
-	game.load.image("map1", "assets/intro/intro001.png");
+	game.load.atlas("kirby", "assets/sprites/normal_kirby/normal_kirby.png", "assets/sprites/normal_kirby/normal_kirby.json");
+	game.load.image("background", "assets/maps/introBG.png");
+	game.load.tilemap("tilemap_intro001", "assets/maps/intro001/intro001.json", null, Phaser.Tilemap.TILED_JSON);
+	game.load.image("map_intro001", "assets/maps/intro001/intro001.png");
 }
 
 var kirby;
@@ -60,7 +60,7 @@ function initBackground() {
 
 function initMap() {
 	map = game.add.tilemap("tilemap_intro001");
-	map.addTilesetImage("intro001", "map1");
+	map.addTilesetImage("intro001", "map_intro001");
 	foregroundLayer = map.createLayer("foreground");
 	groundLayer = map.createLayer("ground");
 	platformLayer = map.createLayer("platform");
