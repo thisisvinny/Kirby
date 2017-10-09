@@ -60,7 +60,7 @@ function initBackground() {
 
 function initMap() {
 	map = game.add.tilemap("tilemap_intro001");
-	map.addTilesetImage("untitled", "map1");
+	map.addTilesetImage("intro001", "map1");
 	foregroundLayer = map.createLayer("foreground");
 	groundLayer = map.createLayer("ground");
 	platformLayer = map.createLayer("platform");
