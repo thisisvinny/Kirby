@@ -11,6 +11,7 @@ var kirby;
 var background;
 var map;
 var controller;
+var scale = 4;
 
 function create() {
 	game.physics.startSystem(Phaser.Physics.ARCADE);
@@ -26,7 +27,7 @@ function create() {
 function update() {
 	if(controller.right.isDown) {
 		kirby.animations.play("walk");
-		kirby.scale.x = 1;
+		kirby.scale.x = scale;
 		kirby.body.velocity.x = 0.1;
 		kirby.body.x += 2;
 		if(kirby.body.x >= game.world.width-30){
@@ -35,7 +36,7 @@ function update() {
 	}
 	else if(controller.left.isDown) {
 		kirby.animations.play("walk");
-		kirby.scale.x = -1;
+		kirby.scale.x = -scale;
 		kirby.body.velocity.x = -0.1;
 		kirby.body.x -= 2;
 		if(kirby.body.x <= 0) {
@@ -55,7 +56,7 @@ function update() {
 
 function initBackground() {
 	background = game.add.sprite(0, 0, "background");
-	background.scale.setTo(4, 4);
+	background.scale.setTo(scale, scale);
 }
 
 function initMap() {
@@ -65,19 +66,25 @@ function initMap() {
 	groundLayer = map.createLayer("ground");
 	platformLayer = map.createLayer("platform");
 	wtfLayer = map.createLayer("wtf");
+
+	foregroundLayer.scale.setTo(scale,scale);
+	platformLayer.scale.setTo(scale,scale);
+	groundLayer.scale.setTo(scale,scale);
+	wtfLayer.scale.setTo(scale,scale);
 }
 
 function initNormalKirby() {
 	kirby = game.add.sprite(100, game.world.height, "kirby");
 
 	//anchor center
-	kirby.anchor.setTo(0.5);
+	kirby.anchor.setTo(0.5,0.5);
 
 	//enable physics
 	game.physics.arcade.enable(kirby);
 	kirby.body.gravity.y = 50;
 	kirby.body.collideWorldBounds = true;
 
+	kirby.scale.setTo(scale,scale);
 	//add animations
 	//each spritesheet has to be broken down into smaller, specific animations later
 	kirby.animations.add("climb", Phaser.Animation.generateFrameNames("climb", 1, 14, "", 3), 10, true);
