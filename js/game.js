@@ -1,4 +1,5 @@
-var game = new Phaser.Game(960, 640, Phaser.AUTO, '', {preload:preload, create:create, update:update});
+var scale = 3;
+var game = new Phaser.Game(240*scale, 160*scale, Phaser.AUTO, '', {preload:preload, create:create, update:update});
 
 function preload() {
 	game.load.atlas("kirby", "assets/sprites/normal_kirby/normal_kirby.png", "assets/sprites/normal_kirby/normal_kirby.json");
@@ -11,7 +12,6 @@ var kirby;
 var background;
 var map;
 var controller;
-var scale = 4;
 
 function create() {
 	game.physics.startSystem(Phaser.Physics.ARCADE);
@@ -25,12 +25,14 @@ function create() {
 }
 
 function update() {
+	game.physics.arcade.collide(kirby, groundLayer);
+
 	if(controller.right.isDown) {
 		kirby.animations.play("walk");
 		kirby.scale.x = scale;
 		kirby.body.velocity.x = 0.1;
 		kirby.body.x += 2;
-		if(kirby.body.x >= game.world.width-30){
+		if(kirby.body.x >= game.world.width-70){
 			kirby.body.x = 0;
 		}
 	}
@@ -71,10 +73,12 @@ function initMap() {
 	platformLayer.scale.setTo(scale,scale);
 	groundLayer.scale.setTo(scale,scale);
 	wtfLayer.scale.setTo(scale,scale);
+
+	map.setCollisionBetween(1, 100, true, "ground");
 }
 
 function initNormalKirby() {
-	kirby = game.add.sprite(100, game.world.height, "kirby");
+	kirby = game.add.sprite(100, 100, "kirby");
 
 	//anchor center
 	kirby.anchor.setTo(0.5,0.5);
