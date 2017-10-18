@@ -35,6 +35,7 @@ function update() {
 		kirby.scale.x = scale;
 		kirby.body.velocity.x = 0.1;
 		kirby.body.x += 20;
+		background.tilePosition.x += 5;
 		if(kirby.body.x >= game.world.width-70){
 			kirby.body.x = 0;
 		}
@@ -44,6 +45,7 @@ function update() {
 		kirby.scale.x = -scale;
 		kirby.body.velocity.x = -0.1;
 		kirby.body.x -= 20;
+		background.tilePosition.x -= 5;
 		if(kirby.body.x <= 0) {
 			kirby.body.x = game.world.width-30;
 		}
@@ -60,7 +62,7 @@ function update() {
 }
 
 function initBackground() {
-	background = game.add.sprite(0, 0, "background");
+	background = game.add.tileSprite(0, 0, mapWidth*scale, mapHeight*scale, "background");
 	background.scale.setTo(scale, scale);
 }
 
