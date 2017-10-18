@@ -77,10 +77,17 @@ function initMap() {
 	groundLayer.scale.setTo(scale,scale);
 	wtfLayer.scale.setTo(scale,scale);
 
-	map.setCollisionBetween(1, 100, true, "ground");
+	map.setCollision([76, 80, 84, 88, 92, 16, 609, 610, 611, 613, 614, 615, 617, 618, 619, 621, 
+						622, 623, 549, 550, 627, 628, 629, 630, 631, 632, 252, 328, 404, 480, 556, 
+						253, 254, 255, 331, 407, 408, 484, 485, 561, 637, 638, 639, 640, 641, 642, 
+						643, 644, 645, 646, 647, 571, 572, 573, 497, 498, 499, 500, 501, 502, 503, 
+						427, 428, 429, 430, 506, 582, 583, 584, 660, 661, 662, 663, 664, 665, 666, 
+						667, 668, 669, 593, 594, 595, 596, 672, 673, 674, 675, 676, 679, 680, 291, 
+						292, 142, 143, 219, 295, 371, 372, 220, 221, 222, 298, 301, 302, 226, 151, 
+						75, 378, 454, 530, 606, 681, 682], true, "ground");
 
 	//the world is the dimensions of the map * the scale 
-	game.world.setBounds(0, 0, 1216*scale, 176*scale);
+	game.world.setBounds(0, 0, mapWidth*scale, mapHeight*scale);
 }
 
 function initNormalKirby() {
