@@ -24,40 +24,114 @@ function create() {
 	initMap();
 	initNormalKirby();
 
+	kirby.body.setSize(0,0,50,50);
+
 	controller = game.input.keyboard.createCursorKeys();
 }
 
 function update() {
 	game.physics.arcade.collide(kirby, groundLayer);
 
-	if(controller.right.isDown) {
+	//have to check for compound movements first before doing singular movements
+	//i.e. jump+left checks before left, otherwise jump+left will never get checked
+
+	//fly kirby to the right
+	if(controller.up.isDown && controller.right.isDown) {
+		kirby.animations.play("fly");
+		//face the right
+		kirby.scale.x = scale;
+		kirby.body.x += 2;
+		kirby.body.y -= 2;
+		kirby.body.velocity.y = -10;
+		//move background with kirby
+		background.tilePosition.x += 0.5;
+	}
+	//fly kirby to the left
+	else if(controller.up.isDown && controller.left.isDown) {
+		kirby.animations.play("fly");
+		kirby.scale.x = -scale;
+		kirby.body.x -= 2;
+		kirby.body.y -= 2;
+		kirby.body.velocity.y = -10;
+		background.tilePosition.x -= 0.5;
+	}
+	//kirby is falling from the air to the right (he cannot walk or run)
+	else if(kirby.body.y != game.world.height && controller.right.isDown) {
+		kirby.animations.play("fall");
+		kirby.scale.x = scale;
+		kirby.body.x += 2;
+		kirby.body.y += 4;
+		kirby.body.velocity.y = 10;
+		background.tilePosition.x += 0.5;
+	}
+	//kirby is falling from the air to the left (he cannot walk or run)
+	else if(kirby.body.y != game.world.height && controller.left.isDown) {
+		kirby.animations.play("fall");
+		kirby.scale.x = -scale;
+		kirby.body.x -= 2;
+		kirby.body.y += 4;
+		kirby.body.velocity.y = 10;
+		background.tilePosition.x -= 0.5;
+	}
+	//run kirby to the right
+	else if(kirby.body.velocity.x >= 150 && controller.right.isDown) {
 		kirby.animations.play("run");
 		kirby.scale.x = scale;
-		kirby.body.velocity.x = 0.1;
-		kirby.body.x += 20;
-		background.tilePosition.x += 5;
-		if(kirby.body.x >= game.world.width-70){
-			kirby.body.x = 0;
-		}
+		kirby.body.x += 4;
+		background.tilePosition.x += 0.5;
 	}
-	else if(controller.left.isDown) {
+	//walk kirby to the right
+	else if(controller.right.isDown) {
+		kirby.animations.play("walk");
+		kirby.scale.x = scale;
+		kirby.body.x += 2;
+		kirby.body.velocity.x += 2;
+		background.tilePosition.x += 0.5;
+	}
+	//run kirby to the left
+	else if(kirby.body.velocity.x <= -150 && controller.left.isDown) {
 		kirby.animations.play("run");
 		kirby.scale.x = -scale;
-		kirby.body.velocity.x = -0.1;
-		kirby.body.x -= 20;
-		background.tilePosition.x -= 5;
-		if(kirby.body.x <= 0) {
-			kirby.body.x = game.world.width-30;
-		}
+		kirby.body.x -= 4;
+		background.tilePosition.x -= 0.5
 	}
+	//walk kirby to the left
+	else if(controller.left.isDown) {
+		kirby.animations.play("walk");
+		kirby.scale.x = -scale;
+		kirby.body.x -= 2;
+		kirby.body.velocity.x -= 2;
+		background.tilePosition.x -= 0.5;
+	}
+	//jump kirby (can only jump if he's on the ground or platform)
+	else if(controller.up.isDown && kirby.body.y == game.world.height) {
+		kirby.animations.play("jump");
+		kirby.body.y -= 50;
+		kirby.body.velocity.y = -30;
+	}
+	//fly kirby (note: does not check for if on ground or platorm, so kirby will fly every other time up is clicked)
 	else if(controller.up.isDown) {
 		kirby.animations.play("fly");
-		kirby.body.velocity.y = -1;
-		kirby.body.y += -1;
+		kirby.body.y -= 2;
+		kirby.body.velocity.y = -10;
 	}
-	else {
+	//crouch kirby
+	else if(controller.down.isDown) {
+		kirby.animations.play("crouch");
 		kirby.body.velocity.x = 0;
-		kirby.animations.play("idle");
+	}
+	//stop moving kirby
+	else {
+		//if kirby is in the air and he has no other inputs, he just idlely falls
+		if(kirby.body.y != game.world.height) {
+			kirby.animations.play("fall");
+			kirby.body.y += 4;
+		}
+		//if kirby not in air, he will stand there idlely
+		else {
+			kirby.animations.play("idle");
+			kirby.body.velocity.x = 0;
+		}
 	}
 }
 
@@ -103,7 +177,7 @@ function initNormalKirby() {
 
 	//enable physics
 	game.physics.arcade.enable(kirby);
-	kirby.body.gravity.y = 50;
+	kirby.body.gravity.y = 100;
 	kirby.body.collideWorldBounds = true;
 
 	kirby.scale.setTo(scale,scale);
